@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-
 //Idenficadores de los objetos de la escena
 int objId =-1;
 
@@ -26,7 +25,7 @@ int main(int argc, char** argv)
   //Se ajusta la cámara
 	//Si no se da valor se cojen valores por defecto
 	glm::mat4 view = glm::mat4(1.0);
-	view[3].z = -6;
+	view[3].z = -5;
 
 	glm::mat4 proj = glm::mat4(1.0);
 	float f = 1.0f / tan(3.141592f / 6.0f);
@@ -48,7 +47,6 @@ int main(int argc, char** argv)
 	IGlib::addColorTex(objId, "../img/color2.png");
 	IGlib::addSpecularTex(objId, "../img/specMap.png");
 	IGlib::addEmissiveTex(objId, "../img/emissive.png");
-	IGlib::addAuxiliarTex(objId, "../img/ambient.png");
 		
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	IGlib::setModelMat(objId, modelMat);
