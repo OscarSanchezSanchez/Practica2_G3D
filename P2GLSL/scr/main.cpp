@@ -20,7 +20,7 @@ void mouseMotionFunc(int x, int y);
 int main(int argc, char** argv)
 {
 	std::locale::global(std::locale("spanish"));// acentos ;)
-	if (!IGlib::init("../shaders_P2/shader.v2.vert", "../shaders_P2/shader.v2.frag"))
+	if (!IGlib::init("../shaders_P2/shader.v1.vert", "../shaders_P2/shader.v1.frag"))
 		return -1;
   //Se ajusta la cámara
 	//Si no se da valor se cojen valores por defecto

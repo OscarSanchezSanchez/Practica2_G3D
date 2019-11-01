@@ -63,5 +63,5 @@ void main()
 	Ks = texture(specularTex,texCoord).rgb;
 	Ke = texture(emiTex,texCoord).rgb;
 	N = normalize(Np);
-	outColor = vec4(shade(),1.0);   
+	outColor = vec4(shade(),1.0); 
 }
