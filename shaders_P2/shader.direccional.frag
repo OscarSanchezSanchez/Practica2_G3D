@@ -13,15 +13,15 @@ uniform sampler2D emiTex;
 //uniform sampler2D normalTex;
 uniform sampler2D specularTex;
 //uniform sampler2D auxiliarTex;
-uniform mat4 view;
+uniform mat4 modelView;
 
 //Intensidad ambiental
-vec3 Ia = vec3(0.01);
+vec3 Ia = vec3(0.1);
 
-//propiedades de la fuente de luz (puntual)
-vec3 Il1 = vec3(0.75f);
-vec3 PL1 = (/*view*/vec4(0,0,0,1)).xyz; //si quiero que sea estatica, la multiplico por matrix view
-vec3 C_atenuacion = vec3(1,0.1,0);
+//propiedades de la fuente de luz (direccional)
+vec3 IL = vec3(1);
+vec4 DL = vec4(-1,0,0,0); 
+
 
 //Propiedades del objeto
 vec3 Ka = vec3(1,0,0);
@@ -30,29 +30,26 @@ vec3 Ks = vec3(1);
 float n = 100.0;
 vec3 Ke = vec3(0);
 
-
 vec3 N;
 
 vec3 shade()
 {	
-	float d = distance(Pp,PL1);
-	float atenuation_factor = 1.0f/(C_atenuacion.z * d*d + C_atenuacion.y * d + C_atenuacion.x) ;
-	float Fatt = min(atenuation_factor,1);
 	vec3 cf = vec3(0);
 
 	////Ambiental////
 	cf += Ia * Ka;
 
 	////Difuso////
-	vec3 L = normalize(PL1 - Pp);
-	cf += clamp(Il1*Kd*dot(Np,L)*Fatt,0,1);
+	vec3 L = normalize(DL.xyz);
+	cf += clamp(IL*Kd*dot(Np,L),0,1);
 
 	////Especular////
+
+	//¿calcular N, L y V en vertexShader?
 	vec3 V = normalize(-Pp); 
 	vec3 R = reflect(-L,N);
 	float fs = pow(max(0,dot(R,V)),n);
-	cf += Il1*Ks*fs*Fatt;
-	cf += Ke;
+	cf += IL*Ks*fs;    
 	
 	return cf;
 }

@@ -22,10 +22,6 @@ vec3 Ia = vec3(0.1);
 vec3 Il1 = vec3(0.75f);
 vec3 PL1 = (/*view*/vec4(0,0,0,1)).xyz; //si quiero que sea estatica, la multiplico por matrix view
 
-//segunda fuente de luz (direccional)
-vec3 IL_direccional = vec3(1);
-vec3 DL_direccional = vec4(1,0,0,0).xyz; //el 0 en w significa que es luz direccional, no tiene posicion en el espacio
-//preguntar a marcos como posicionar bien la luz
 
 
 //Propiedades del objeto
@@ -49,14 +45,8 @@ vec3 shade()
 	cf += Ia * Ka;
 
 	//Difuso
-
-	//puntual
 	vec3 L = normalize(PL1 - Pp);
 	cf += clamp(Il1*Kd*dot(Np,L)*Fatt,0,1);
-
-	//direccional
-	vec3 L_direccional = normalize(-DL_direccional/mod(DL_direccional.x,DL_direccional.y));//aqui creo q es negativo para simular que la luz esta en el infinto
-	cf += clamp(IL_direccional*Kd*dot(Np,L_direccional),0,1);
 
 	//Especular
 
@@ -65,12 +55,7 @@ vec3 shade()
 	vec3 R = reflect(-L,N);
 	float fs = pow(max(0,dot(R,V)),n);
 	cf += Il1*Ks*fs*Fatt;
-	cf += Ke;
-
-	//direccional
-	vec3 R_direccional = reflect(-L_direccional,N);
-	fs = pow(max(0,dot(R_direccional,V)),n);
-	cf += IL_direccional*Ks*fs;    
+	cf += Ke; 
 
 	return cf;
 }
