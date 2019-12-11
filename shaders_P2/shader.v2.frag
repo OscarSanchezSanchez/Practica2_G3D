@@ -15,12 +15,13 @@ uniform sampler2D specularTex;
 //uniform sampler2D auxiliarTex;
 uniform mat4 view;
 
-//Luz ambiental
-vec3 Ia = vec3(0.1);
+//Intensidad ambiental
+vec3 Ia = vec3(0.01);
 
-//propiedades de la fuente de luz
+//propiedades de la fuente de luz (puntual)
 vec3 Il1 = vec3(0.75f);
 vec3 PL1 = (/*view*/vec4(0,0,0,1)).xyz; //si quiero que sea estatica, la multiplico por matrix view
+vec3 C_atenuacion = vec3(1,0.1,0);
 
 //Propiedades del objeto
 vec3 Ka = vec3(1,0,0);
@@ -29,7 +30,6 @@ vec3 Ks = vec3(1);
 float n = 100.0;
 vec3 Ke = vec3(0);
 
-vec3 C_atenuacion = vec3(1,0.25,0);
 
 vec3 N;
 
@@ -39,23 +39,23 @@ vec3 shade()
 	float atenuation_factor = 1.0f/(C_atenuacion.z * d*d + C_atenuacion.y * d + C_atenuacion.x) ;
 	float Fatt = min(atenuation_factor,1);
 	vec3 cf = vec3(0);
-	//Ambiental
+
+	////Ambiental////
 	cf += Ia * Ka;
 
-	//Difuso
+	////Difuso////
 	vec3 L = normalize(PL1 - Pp);
 	cf += clamp(Il1*Kd*dot(Np,L)*Fatt,0,1);
 
-	//Especular
+	////Especular////
 	vec3 V = normalize(-Pp); 
 	vec3 R = reflect(-L,N);
 	float fs = pow(max(0,dot(R,V)),n);
 	cf += Il1*Ks*fs*Fatt;
 	cf += Ke;
-
+	
 	return cf;
 }
-
 void main()
 {
 	Kd = texture(colorTex,texCoord).rgb;
@@ -63,5 +63,5 @@ void main()
 	Ks = texture(specularTex,texCoord).rgb;
 	Ke = texture(emiTex,texCoord).rgb;
 	N = normalize(Np);
-	outColor = vec4(shade(),1.0);   
+	outColor = vec4(shade(),1.0); 
 }

@@ -43,5 +43,11 @@
     <None Include="..\shaders_P2\shader.v2.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\shaders_P2\shader.focal.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders_P2\shader.direccional.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
