@@ -44,8 +44,6 @@ vec3 shade()
 	cf += clamp(IL*Kd*dot(Np,L),0,1);
 
 	////Especular////
-
-	//¿calcular N, L y V en vertexShader?
 	vec3 V = normalize(-Pp); 
 	vec3 R = reflect(-L,N);
 	float fs = pow(max(0,dot(R,V)),n);

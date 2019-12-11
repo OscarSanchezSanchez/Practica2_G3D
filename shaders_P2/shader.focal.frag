@@ -21,7 +21,7 @@ vec3 Ia = vec3(0.1);
 //propiedades de la fuente de luz(focal)
 vec3 IL = vec3(1);
 vec3 PL = vec3(0,0,0);
-vec3 DL = vec3(0,0,-1);*******
+vec3 DL = vec3(0,0,-1);
 float cone_angle = radians(10.0);
 //vec3 C_atenuacion = vec3(1,0.25,0);
 
