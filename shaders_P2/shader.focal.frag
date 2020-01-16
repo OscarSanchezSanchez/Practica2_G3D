@@ -42,17 +42,19 @@ vec3 shade()
 
 	//restriccion de luz focal
 	////Ambiental////
-	//cf += Ia * Ka;
+	cf += Ia * Ka;
 
-	////Difuso////
+	////Difusa////
 	vec3 aux = PL - Pp;
 	vec3 L = normalize(aux);
 
 	bool frag_valid = dot(normalize(DL),-L) > cos(cone_angle);
 	if(frag_valid)
 	{
+		////Difusa////
 		cf += clamp (IL * Kd * dot(N,L),0,1) ;
 
+		////Especular////
 		vec3 V = normalize(-Pp); 
 		vec3 R = reflect(-L,N);
 		float fs = pow(max(0,dot(R,V)),n);
@@ -60,8 +62,8 @@ vec3 shade()
 
 	}
 
-	////Especular////
-	//cf += Ke;	
+	////Emisiva////
+	cf += Ke;	
 
 	return cf;
 }
