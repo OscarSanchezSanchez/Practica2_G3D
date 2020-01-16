@@ -9,6 +9,21 @@
 //Idenficadores de los objetos de la escena
 int objId =-1;
 
+//Matriz de vista
+//Se ajusta la camara
+//Si no se da valor se cogen valores por defecto
+glm::mat4 view = glm::mat4(1.0f);
+
+//Matriz de proyeccion
+glm::mat4 proj = glm::mat4(0.0f);
+
+//Traslación por teclado
+glm::vec3 position(0.0, 0.0, 0.0);
+float displacement = 0.1f;
+
+//Giro de cámara por teclado
+float yaw_angle = 0.01f;
+
 //Declaración de CB
 void resizeFunc(int width, int height);
 void idleFunc();
@@ -20,14 +35,14 @@ void mouseMotionFunc(int x, int y);
 int main(int argc, char** argv)
 {
 	std::locale::global(std::locale("spanish"));// acentos ;)
-	if (!IGlib::init("../shaders_P2/shader.v2.vert", "../shaders_P2/shader.focal.frag"))
+	if (!IGlib::init("../shaders_P2/shader.bumpMapping.vert", "../shaders_P2/shader.bumpMapping.frag"))
 		return -1;
   //Se ajusta la cámara
 	//Si no se da valor se cojen valores por defecto
 	glm::mat4 view = glm::mat4(1.0);
 	view[3].z = -5;
 
-	glm::mat4 proj = glm::mat4(1.0);
+	proj = glm::mat4(1.0);
 	float f = 1.0f / tan(3.141592f / 6.0f);
 	float far = 10.0f;
 	float near = 0.1f;
@@ -47,6 +62,7 @@ int main(int argc, char** argv)
 	IGlib::addColorTex(objId, "../img/color2.png");
 	IGlib::addSpecularTex(objId, "../img/specMap.png");
 	IGlib::addEmissiveTex(objId, "../img/emissive.png");
+	IGlib::addNormalTex(objId, "../img/normal.png");
 		
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	IGlib::setModelMat(objId, modelMat);
@@ -66,7 +82,11 @@ int main(int argc, char** argv)
 
 void resizeFunc(int width, int height)
 {
-	//Ajusta el aspect ratio al tamaño de la venta
+	float aspectRatio = (float)width / (float)height;
+
+	proj[0].x = 1 / (glm::tan(glm::radians(30.0f)) * aspectRatio);
+
+	IGlib::setProjMat(proj);
 }
 
 void idleFunc()
@@ -83,6 +103,40 @@ void idleFunc()
 void keyboardFunc(unsigned char key, int x, int y)
 {
 	std::cout << "Se ha pulsado la tecla " << key << std::endl << std::endl;
+	glm::mat4 translation(1.0f);
+
+	glm::mat4 rotation(1.0f);
+
+
+	switch (key)
+	{
+	case 'w':
+		position.z += displacement;
+		break;
+	case 's':
+		position.z -= displacement;
+		break;
+	case 'a':
+		position.x += displacement;
+		break;
+	case 'd':
+		position.x -= displacement;
+		break;
+	case 'q':
+		rotation = glm::rotate(rotation, -yaw_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		view = rotation * view;
+		break;
+	case 'e':
+		rotation = glm::rotate(rotation, yaw_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		view = rotation * view;
+		break;
+	default:
+		break;
+	}
+
+	translation = glm::translate(translation, position);
+	IGlib::setViewMat(translation * view);
+
 }
 
 void mouseFunc(int button, int state, int x, int y)

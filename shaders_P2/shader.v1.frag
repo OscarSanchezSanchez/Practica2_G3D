@@ -65,5 +65,5 @@ void main()
 	Kd = color;
 	Ka = color;
 	N = normalize(Np);
-	outColor = vec4(shade(),1.0); //para direccional se supone que tiene q ser un 0 en w.  
+	outColor = vec4(shade(),1.0); 
 }
