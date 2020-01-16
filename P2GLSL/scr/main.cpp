@@ -9,6 +9,13 @@
 //Idenficadores de los objetos de la escena
 int objId =-1;
 
+//Declaración de CB
+void resizeFunc(int width, int height);
+void idleFunc();
+void keyboardFunc(unsigned char key, int x, int y);
+void mouseFunc(int button, int state, int x, int y);
+void mouseMotionFunc(int x, int y);
+
 //Matriz de vista
 //Se ajusta la camara
 //Si no se da valor se cogen valores por defecto
@@ -24,22 +31,14 @@ float displacement = 0.1f;
 //Giro de cámara por teclado
 float yaw_angle = 0.01f;
 
-//Declaración de CB
-void resizeFunc(int width, int height);
-void idleFunc();
-void keyboardFunc(unsigned char key, int x, int y);
-void mouseFunc(int button, int state, int x, int y);
-void mouseMotionFunc(int x, int y);
-
 
 int main(int argc, char** argv)
 {
 	std::locale::global(std::locale("spanish"));// acentos ;)
 	if (!IGlib::init("../shaders_P2/shader.bumpMapping.vert", "../shaders_P2/shader.bumpMapping.frag"))
 		return -1;
-  //Se ajusta la cámara
-	//Si no se da valor se cojen valores por defecto
-	glm::mat4 view = glm::mat4(1.0);
+
+	//Se ajusta la cámara
 	view[3].z = -5;
 
 	proj = glm::mat4(1.0);
@@ -72,7 +71,7 @@ int main(int argc, char** argv)
 	IGlib::setResizeCB(resizeFunc);
 	IGlib::setKeyboardCB(keyboardFunc);
 	IGlib::setMouseCB(mouseFunc);
-  IGlib::setMouseMoveCB(mouseMotionFunc);
+	IGlib::setMouseMoveCB(mouseMotionFunc);
 	
 	//Mainloop
 	IGlib::mainLoop();
