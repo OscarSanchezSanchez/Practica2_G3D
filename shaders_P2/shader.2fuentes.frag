@@ -19,11 +19,11 @@ uniform mat4 view;
 vec3 Ia = vec3(0.1);
 
 //propiedades de la fuente de luz
-vec3 Il1 = vec3(0.75f);
+vec3 Il1 = vec3(0.0, 0.0, 1.0);
 vec3 PL1 = (/*view*/vec4(1,-1,0,1)).xyz; //si quiero que sea estatica, la multiplico por matrix view
 
 //Segunda fuente de luz
-vec3 Il2 = vec3(1);
+vec3 Il2 = vec3(1.0, 0.0, 0.0);
 vec3 Pl2 = vec4(-2,1,0,1).xyz; //si quiero que sea estatica, la multiplico por matrix view
 
 //Propiedades del objeto
