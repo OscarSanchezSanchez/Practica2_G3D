@@ -22,8 +22,9 @@ vec3 Ia = vec3(0.1);
 vec3 IL = vec3(1);
 vec3 PL = vec3(0,0,0);
 vec3 DL = vec3(0,0,-1);
-float cone_angle = radians(10.0);
-//vec3 C_atenuacion = vec3(1,0.25,0);
+float cone_angle = radians(15.0);
+//float spot_exponent = radians(7.0);
+vec3 C_atenuacion = vec3(0,0,0.3);
 
 
 //Propiedades del objeto
@@ -38,6 +39,9 @@ vec3 N;
 
 vec3 shade()
 {	
+	float d = distance(Pp,PL);
+	float atenuation_factor = 1.0f/(C_atenuacion.z * d*d + C_atenuacion.y * d + C_atenuacion.x);
+	float Fatt = min(atenuation_factor,1);
 	vec3 cf = vec3(0);
 
 	//restriccion de luz focal
@@ -52,18 +56,19 @@ vec3 shade()
 	if(frag_valid)
 	{
 		////Difusa////
-		cf += clamp (IL * Kd * dot(N,L),0,1) ;
+		cf += clamp (IL * Kd * dot(N,L)*Fatt,0,1) ;
 
 		////Especular////
 		vec3 V = normalize(-Pp); 
 		vec3 R = reflect(-L,N);
 		float fs = pow(max(0,dot(R,V)),n);
-		cf += IL*Ks*fs; 
-
+		cf += IL*Ks*fs*Fatt; 
+		
+		////Emisiva////
+		cf += Ke;	
 	}
 
-	////Emisiva////
-	cf += Ke;	
+
 
 	return cf;
 }
