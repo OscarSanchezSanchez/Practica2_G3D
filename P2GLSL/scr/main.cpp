@@ -25,11 +25,17 @@ glm::mat4 view = glm::mat4(1.0f);
 glm::mat4 proj = glm::mat4(0.0f);
 
 //Traslación por teclado
-glm::vec3 position(0.0, 0.0, 0.0);
 float displacement = 0.1f;
 
 //Giro de cámara por teclado
 float yaw_angle = 0.01f;
+
+//Movimiento de cámara con el ratón
+const float orbitAngle = 0.1f;
+float lastX = 0.0f;
+float lastY = 0.0f;
+float yaw = 0.0f;
+float pitch = 0.0f;
 
 
 int main(int argc, char** argv)
@@ -102,24 +108,22 @@ void idleFunc()
 void keyboardFunc(unsigned char key, int x, int y)
 {
 	std::cout << "Se ha pulsado la tecla " << key << std::endl << std::endl;
-	glm::mat4 translation(1.0f);
 
 	glm::mat4 rotation(1.0f);
-
 
 	switch (key)
 	{
 	case 'w':
-		position.z += displacement;
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, displacement));
 		break;
 	case 's':
-		position.z -= displacement;
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -displacement));
 		break;
 	case 'a':
-		position.x += displacement;
+		view = glm::translate(view, glm::vec3(displacement, 0.0f, 0.0f));
 		break;
 	case 'd':
-		position.x -= displacement;
+		view = glm::translate(view, glm::vec3(-displacement, 0.0f, 0.0f));
 		break;
 	case 'q':
 		rotation = glm::rotate(rotation, -yaw_angle, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -133,26 +137,39 @@ void keyboardFunc(unsigned char key, int x, int y)
 		break;
 	}
 
-	translation = glm::translate(translation, position);
-	IGlib::setViewMat(translation * view);
+	IGlib::setViewMat(view);
 
 }
 
 void mouseFunc(int button, int state, int x, int y)
 {
-	if (state==0)
-		std::cout << "Se ha pulsado el botón ";
+	if (state == 0)
+		std::cout << "Se ha pulsado el boton ";
 	else
-		std::cout << "Se ha soltado el botón ";
-	
-	if (button == 0) std::cout << "de la izquierda del ratón " << std::endl;
-	if (button == 1) std::cout << "central del ratón " << std::endl;
-	if (button == 2) std::cout << "de la derecha del ratón " << std::endl;
+		std::cout << "Se ha soltado el boton ";
 
-	std::cout << "en la posición " << x << " " << y << std::endl << std::endl;
+	if (button == 0) std::cout << "de la izquierda del raton " << std::endl;
+	if (button == 1) std::cout << "central del raton " << std::endl;
+	if (button == 2) std::cout << "de la derecha del raton " << std::endl;
+
+	std::cout << "en la posicion " << x << " " << y << std::endl << std::endl;
+
+	mouseMotionFunc(x, y);
 }
 
 void mouseMotionFunc(int x, int y)
 {
 
+	float xOffset = (float)x - lastX;
+	float yOffset = (float)y - lastY;
+
+	lastX = (float)x;
+	lastY = (float)y;
+
+	yaw += xOffset;
+	pitch += yOffset;
+
+	view = glm::rotate(view, orbitAngle, glm::vec3(yaw, pitch, 0.0));
+
+	IGlib::setViewMat(view);
 }
