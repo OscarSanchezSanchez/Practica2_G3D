@@ -28,14 +28,14 @@ glm::mat4 proj = glm::mat4(0.0f);
 float displacement = 0.1f;
 
 //Giro de cámara por teclado
-float yaw_angle = 0.01f;
+float desplX_angle = 0.01f;
 
 //Movimiento de cámara con el ratón
 const float orbitAngle = 0.1f;
 float lastX = 0.0f;
 float lastY = 0.0f;
-float yaw = 0.0f;
-float pitch = 0.0f;
+float desplX = 0.0f;
+float desplY = 0.0f;
 
 
 int main(int argc, char** argv)
@@ -126,11 +126,11 @@ void keyboardFunc(unsigned char key, int x, int y)
 		view = glm::translate(view, glm::vec3(-displacement, 0.0f, 0.0f));
 		break;
 	case 'q':
-		rotation = glm::rotate(rotation, -yaw_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		rotation = glm::rotate(rotation, -desplX_angle, glm::vec3(0.0f, 1.0f, 0.0f));
 		view = rotation * view;
 		break;
 	case 'e':
-		rotation = glm::rotate(rotation, yaw_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		rotation = glm::rotate(rotation, desplX_angle, glm::vec3(0.0f, 1.0f, 0.0f));
 		view = rotation * view;
 		break;
 	default:
@@ -166,10 +166,10 @@ void mouseMotionFunc(int x, int y)
 	lastX = (float)x;
 	lastY = (float)y;
 
-	yaw += xOffset;
-	pitch += yOffset;
+	desplX += xOffset;
+	desplY += yOffset;
 
-	view = glm::rotate(view, orbitAngle, glm::vec3(yaw, pitch, 0.0));
+	view = glm::rotate(view, orbitAngle, glm::vec3(desplY, desplX, 0.0));
 
 	IGlib::setViewMat(view);
 }
